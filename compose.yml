@@ -5,6 +5,8 @@ services:
       - "8080:8080"
     environment:
       - MANAGEMENT_OTLP_TRACING_ENDPOINT=http://jaeger:4318/v1/traces
+      - MANAGEMENT_ZIPKIN_TRACING_ENDPOINT=http://zipkin:9411/api/v2/spans
+      - OTEL_SERVICE_NAME=demotory
     logging:
       driver: fluentd
       options:
@@ -104,3 +106,15 @@ services:
         fluentd-address: localhost:24300
         fluentd-async: "true"
         tag: demotory.jaeger
+
+  zipkin:
+    image: openzipkin/zipkin:latest
+    profiles: [observability]
+    ports:
+      - "9411:9411"
+    logging:
+      driver: fluentd
+      options:
+        fluentd-address: localhost:24300
+        fluentd-async: "true"
+        tag: demotory.zipkin
